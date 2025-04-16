@@ -5,7 +5,7 @@ A comprehensive Docker Compose setup for managing and streaming your media libra
 ## 📦 Included Services
 
 - **Gluetun**: VPN client for secure internet access.
-- **qBittorrent**: Torrent client with web UI.
+- **qBittorrent**: Torrent client with Vuetorrent Web UI.
 - **Sonarr**: TV series management.
 - **Radarr**: Movie management.
 - **Jellyseerr**: Media request system.
