@@ -1,3 +1,17 @@
+# ==============================
+# Docker Compose Setup Overview
+# ==============================
+#
+# This Docker Compose setup manages and streams your media library using multiple services:
+# - Sonarr: TV show management and automatic downloading.
+# - Radarr: Movie management and automatic downloading.
+# - Jellyseerr: Media request interface for users to request content.
+# - Prowlarr: Indexer manager for Sonarr and Radarr integration.
+#
+# All containers are configured to use a custom network (`the_arrs_stack`) to facilitate internal
+# communication. Persistent configurations and data storage are ensured using volumes.
+# Containers are set to restart unless manually stopped, ensuring service reliability.
+
 version: '3.8'
 
 services:
