@@ -1,0 +1,54 @@
+This Docker Compose setup allows you to securely run qBittorrent through a VPN using Gluetun. Additionally, it enhances the user interface with VueTorrent, a sleek and modern Web UI built with Vue.js. Key Features:
+
+Secure VPN Integration: Gluetun is used to route qBittorrent traffic through a VPN, ensuring privacy and security.
+Modern Web Interface: VueTorrent is incorporated to provide a responsive and visually appealing Web UI for qBittorrent.
+Customizable Download Directory: You can easily specify your preferred download location on your host system.
+Persistent Configuration: Your settings and configurations are retained across container restarts.
+Automatic Restart: Containers are configured to restart automatically unless stopped manually, enhancing reliability.​
+Note: To use VueTorrent, make sure the DOCKER_MODS environment variable is set correctly in the qBittorrent service configuration. After deployment, access the qBittorrent Web UI at http://localhost:8085. Navigate to Options > Web UI, enable “Use alternative Web UI,” and set the location to /vuetorrent.
+
+version: "3.8"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN  # Grants the container additional network capabilities
+    devices:
+      - /dev/net/tun:/dev/net/tun  # Required for VPN tunneling
+    ports:
+      - 8085:8085  # qBittorrent Web UI port
+      - 6881:6881/udp  # qBittorrent torrent port (UDP)
+    volumes:
+      - /Users/yourusername/Downloads/torrents:/downloads  # Host directory for downloads
+      - ./gluetun:/gluetun  # Directory for Gluetun configuration
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn  # Specify your VPN provider
+      - VPN_TYPE=wireguard  # VPN protocol
+      - WIREGUARD_PRIVATE_KEY=  # Your WireGuard private key
+      - WIREGUARD_PRESHARED_KEY=  # Optional: WireGuard preshared key
+      - WIREGUARD_ADDRESSES=10.160.62.112/32  # Assigned VPN IP address
+      - SERVER_COUNTRIES=United Kingdom  # Preferred VPN server location
+      - FIREWALL_VPN_INPUT_PORTS=8085,6881  # Ports to allow through the VPN
+      - TZ=Europe/London  # Timezone setting
+    restart: unless-stopped  # Automatically restart the container unless stopped manually
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    network_mode: service:gluetun  # Shares network with Gluetun for VPN routing
+    environment:
+      - PUID=1000  # User ID for file permissions
+      - PGID=1000  # Group ID for file permissions
+      - TZ=Europe/London  # Timezone setting
+      - WEBUI_PORT=8085  # Port for the qBittorrent Web UI
+      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest  # Adds VueTorrent UI mod
+    volumes:
+      - ./qbittorrent/config:/config  # Configuration files for qBittorrent
+      - /Users/yourusername/Downloads/torrents:/downloads  # Host directory for downloads
+    depends_on:
+      - gluetun  # Ensures Gluetun starts before qBittorrent
+    restart: unless-stopped  # Automatically restart the container unless stopped manually
+
+networks: {}  # No custom networks defined; using default
