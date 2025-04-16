@@ -1,6 +1,23 @@
-#This Docker Compose setup allows you to securely run qBittorrent through a VPN using Gluetun. Additionally, it enhances the user interface with VueTorrent, a sleek and modern Web UI built with Vue.js. Key Features:
+# ============================
+# Docker Compose Setup Overview
+# ============================
+#
+# This Docker Compose setup allows you to securely run qBittorrent through a VPN using Gluetun.
+# Additionally, it enhances the user interface with VueTorrent, a sleek and modern Web UI built with Vue.js.
+#
+# Key Features:
+# - Secure VPN Integration: Routes qBittorrent traffic through a VPN for privacy and security.
+# - Modern Web Interface: Incorporates VueTorrent for a responsive and visually appealing Web UI.
+# - Customizable Download Directory: Easily specify your preferred download location on your host system.
+# - Persistent Configuration: Retains settings and configurations across container restarts.
+# - Automatic Restart: Containers are configured to restart automatically unless stopped manually.
+#
+# Note:
+# To use VueTorrent, ensure the DOCKER_MODS environment variable is set correctly in the qBittorrent service configuration.
+# After deployment, access the qBittorrent Web UI at http://localhost:8085.
+# Navigate to Options > Web UI, enable "Use alternative Web UI," and set the location to /vuetorrent.
 
-#Note: To use VueTorrent, make sure the DOCKER_MODS environment variable is set correctly in the qBittorrent service configuration. After deployment, access the qBittorrent Web UI at http://localhost:8085. Navigate to Options > Web UI, enable “Use alternative Web UI,” and set the location to /vuetorrent.
+
 
 version: "3.8"
 
