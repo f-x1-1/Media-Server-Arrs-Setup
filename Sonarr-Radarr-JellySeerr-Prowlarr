@@ -10,9 +10,9 @@ services:
       - PGID=1000  # Group ID for file permissions
       - TZ=Europe/London  # Timezone
     volumes:
-      - /path/to/sonarr/config:/config  # Configuration files
-      - /path/to/tv/shows:/tv  # TV shows directory
-      - /path/to/downloads:/downloads  # Downloads directory
+      - ./config/sonarr:/config  # Configuration files
+      - ./media/tv:/tv  # TV shows directory
+      - ./downloads:/downloads  # Downloads directory
     ports:
       - 8989:8989  # Web UI port
     networks:
@@ -28,9 +28,9 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /path/to/radarr/config:/config
-      - /path/to/movies:/movies  # Movies directory
-      - /path/to/downloads:/downloads
+      - ./config/radarr:/config
+      - ./media/movies:/movies  # Movies directory
+      - ./downloads:/downloads
     ports:
       - 7878:7878
     networks:
@@ -46,7 +46,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /path/to/jellyseerr/config:/app/config
+      - ./config/jellyseerr:/app/config
     ports:
       - 5055:5055
     networks:
@@ -62,7 +62,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /path/to/prowlarr/config:/config
+      - ./config/prowlarr:/config
     ports:
       - 9696:9696
     networks:
@@ -72,24 +72,3 @@ services:
 networks:
   the_arrs_stack:
     driver: bridge
-
-/path/to/
-├── downloads/
-├── movies/
-├── tv/
-├── sonarr/
-│   └── config/
-├── radarr/
-│   └── config/
-├── jellyseerr/
-│   └── config/
-└── prowlarr/
-    └── config/
-
-
-docker network create the_arrs_stack
-
-
-docker-compose up -d
-
-
